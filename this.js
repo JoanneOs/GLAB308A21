@@ -428,6 +428,45 @@ similarly polymorphic.
 
 
 //Part 1: Humble Beginnings
+// Create the adventurer object named "Robin"
+const adventurer = {
+    name: "Robin", // Adventurer's name
+    health: 10, // Adventurer's health points
+    inventory: ["sword", "potion", "artifact"], // Adventurer's inventory (array of items)
+    companion: { // Nested object for Robin's companion
+        name: "Leo", // Companion's name
+        type: "Cat", // Companion's type (a cat)
+        companion: { // Nested object for Leo's companion
+            name: "Frank", // Frank's name
+            type: "Flea", // Frank's type (a flea)
+            belongings: ["small hat", "sunglasses"] // Frank's belongings (array of items)
+        }
+    },
+    // Method for rolling dice (common in adventuring games)
+    roll(mod = 0) {
+        // Generate a random number between 1 and 20, then add the modifier
+        const result = Math.floor(Math.random() * 20) + 1 + mod;
+        // Log the result to the console
+        console.log(`${this.name} rolled a ${result}.`);
+    }
+};
 
+// Log each item in Robin's inventory using a loop
+console.log("Robin's inventory:");
+for (let item of adventurer.inventory) {
+    console.log(item); // Prints each item in the inventory
+}
+
+// Access and log Leo's name
+console.log(`Robin's companion is named ${adventurer.companion.name}.`); // Output: "Robin's companion is named Leo."
+
+// Access and log Frank's belongings
+console.log(`Frank has the following items: ${adventurer.companion.companion.belongings.join(", ")}.`); // Output: "Frank has the following items: small hat, sunglasses."
+
+// Test the roll method a few times
+console.log("Testing Robin's roll method:");
+adventurer.roll(); // Example output: "Robin rolled a 12."
+adventurer.roll(3); // Example output: "Robin rolled a 18." (with a modifier of 3)
+adventurer.roll(-2); // Example output: "Robin rolled a 5." (with a modifier of -2)
 
 
