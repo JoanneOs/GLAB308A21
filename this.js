@@ -606,4 +606,103 @@ for (let item of frank.inventory) {
     console.log(item); // Prints each item in Frank's inventory
 }
 
+//Part 4: Class Uniforms
+// Base Character class
+class Character {
+    // Static property: Maximum health for all characters
+    static MAX_HEALTH = 100;
+
+    constructor(name) {
+        this.name = name; // Character's name
+        this.health = Character.MAX_HEALTH; // Default health (uses static property)
+        this.inventory = []; // Default empty inventory
+    }
+
+    // Roll method for dice rolls
+    roll(mod = 0) {
+        const result = Math.floor(Math.random() * 20) + 1 + mod;
+        console.log(`${this.name} rolled a ${result}.`);
+    }
+}
+
+// Adventurer class extending Character
+class Adventurer extends Character {
+    // Static property: Allowed roles for adventurers
+    static ROLES = ["Fighter", "Healer", "Wizard", "Ranger"];
+
+    constructor(name, role) {
+        super(name); // Call the parent class constructor
+
+        // Check if the role is valid
+        if (!Adventurer.ROLES.includes(role)) {
+            throw new Error(`Invalid role: ${role}. Must be one of ${Adventurer.ROLES.join(", ")}.`);
+        }
+
+        this.role = role; // Adventurer's specialized role
+        this.inventory.push("bedroll", "50 gold coins"); // Default items for adventurers
+    }
+
+    // Method for scouting ahead
+    scout() {
+        console.log(`${this.name} is scouting ahead...`);
+        super.roll(); // Use the roll method from the parent class
+    }
+
+    // Method for resting to recover health
+    rest() {
+        this.health = Character.MAX_HEALTH; // Restore health to full (uses static property)
+        console.log(`${this.name} rested and recovered full health.`);
+    }
+}
+
+// Companion class extending Character
+class Companion extends Character {
+    constructor(name, type, job) {
+        super(name); // Call the parent class constructor
+        this.type = type; // Companion's type (e.g., "Cat", "Flea")
+        this.job = job; // Companion's job (e.g., "Support", "Entertainer")
+    }
+
+    // Method for companions to assist
+    assist() {
+        console.log(`${this.name} the ${this.type} is assisting with ${this.job}.`);
+    }
+}
+
+// Create Robin using the Adventurer class
+const robin = new Adventurer("Robin", "Ranger");
+robin.inventory.push("sword", "potion", "artifact"); // Add Robin's inventory
+
+// Create Robin's companion, Leo, using the Companion class
+const leo = new Companion("Leo", "Cat", "Scouting");
+robin.companion = leo;
+
+// Create Leo's companion, Frank, using the Companion class
+const frank = new Companion("Frank", "Flea", "Entertainment");
+frank.inventory.push("small hat", "sunglasses"); // Add Frank's inventory
+robin.companion.companion = frank;
+
+// Test the new static properties and methods
+console.log("Testing static properties and methods:");
+console.log(`Max health for all characters: ${Character.MAX_HEALTH}`); // Output: "Max health for all characters: 100"
+console.log(`Allowed roles for adventurers: ${Adventurer.ROLES.join(", ")}`); // Output: "Allowed roles for adventurers: Fighter, Healer, Wizard, Ranger"
+
+// Test the Adventurer and Companion methods
+robin.scout(); // Example: "Robin is scouting ahead..." followed by a roll
+robin.rest(); // Example: "Robin rested and recovered full health."
+leo.assist(); // Example: "Leo the Cat is assisting with Scouting."
+frank.assist(); // Example: "Frank the Flea is assisting with Entertainment."
+
+// Log Robin's inventory
+console.log("Robin's inventory:");
+for (let item of robin.inventory) {
+    console.log(item); // Prints each item in Robin's inventory
+}
+
+// Log Frank's belongings
+console.log("Frank's belongings:");
+for (let item of frank.inventory) {
+    console.log(item); // Prints each item in Frank's inventory
+}
+
 //
