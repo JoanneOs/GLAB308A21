@@ -523,3 +523,87 @@ for (let item of robin.companion.companion.inventory) {
     console.log(item); // Prints each item in Frank's inventory
 }
 
+//Part 3: Class Features
+// Base Character class
+class Character {
+    constructor(name) {
+        this.name = name; // Character's name
+        this.health = 100; // Default health
+        this.inventory = []; // Default empty inventory
+    }
+
+    // Roll method for dice rolls
+    roll(mod = 0) {
+        const result = Math.floor(Math.random() * 20) + 1 + mod;
+        console.log(`${this.name} rolled a ${result}.`);
+    }
+}
+
+// Adventurer class extending Character
+class Adventurer extends Character {
+    constructor(name, role) {
+        super(name); // Call the parent class constructor
+        this.role = role; // Adventurer's specialized role (e.g., "Fighter", "Healer")
+        this.inventory.push("bedroll", "50 gold coins"); // Default items for adventurers
+    }
+
+    // Method for scouting ahead
+    scout() {
+        console.log(`${this.name} is scouting ahead...`);
+        super.roll(); // Use the roll method from the parent class
+    }
+
+    // Additional method for adventurers (example: rest to recover health)
+    rest() {
+        this.health = 100; // Restore health to full
+        console.log(`${this.name} rested and recovered full health.`);
+    }
+}
+
+// Companion class extending Character
+class Companion extends Character {
+    constructor(name, type, job) {
+        super(name); // Call the parent class constructor
+        this.type = type; // Companion's type (e.g., "Cat", "Flea")
+        this.job = job; // Companion's job (e.g., "Support", "Entertainer")
+    }
+
+    // Method for companions to assist
+    assist() {
+        console.log(`${this.name} the ${this.type} is assisting with ${this.job}.`);
+    }
+}
+
+// Create Robin using the Adventurer class
+const robin = new Adventurer("Robin", "Ranger");
+robin.inventory.push("sword", "potion", "artifact"); // Add Robin's inventory
+
+// Create Robin's companion, Leo, using the Companion class
+const leo = new Companion("Leo", "Cat", "Scouting");
+robin.companion = leo;
+
+// Create Leo's companion, Frank, using the Companion class
+const frank = new Companion("Frank", "Flea", "Entertainment");
+frank.inventory.push("small hat", "sunglasses"); // Add Frank's inventory
+robin.companion.companion = frank;
+
+// Test the new methods
+console.log("Testing Adventurer and Companion methods:");
+robin.scout(); // Example: "Robin is scouting ahead..." followed by a roll
+robin.rest(); // Example: "Robin rested and recovered full health."
+leo.assist(); // Example: "Leo the Cat is assisting with Scouting."
+frank.assist(); // Example: "Frank the Flea is assisting with Entertainment."
+
+// Log Robin's inventory
+console.log("Robin's inventory:");
+for (let item of robin.inventory) {
+    console.log(item); // Prints each item in Robin's inventory
+}
+
+// Log Frank's belongings
+console.log("Frank's belongings:");
+for (let item of frank.inventory) {
+    console.log(item); // Prints each item in Frank's inventory
+}
+
+//
