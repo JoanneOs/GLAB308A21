@@ -470,3 +470,56 @@ adventurer.roll(3); // Example output: "Robin rolled a 18." (with a modifier of 
 adventurer.roll(-2); // Example output: "Robin rolled a 5." (with a modifier of -2)
 
 
+//Part 2: Class Fantasy
+// Define the base Character class
+class Character {
+    constructor(name) {
+        this.name = name; // Character's name
+        this.health = 100; // Default health
+        this.inventory = []; // Default empty inventory
+    }
+
+    // Roll method for dice rolls
+    roll(mod = 0) {
+        const result = Math.floor(Math.random() * 20) + 1 + mod;
+        console.log(`${this.name} rolled a ${result}.`);
+    }
+}
+
+// Define the Companion class, extending Character
+class Companion extends Character {
+    constructor(name, type) {
+        super(name); // Call the parent class constructor
+        this.type = type; // Add type property (e.g., "Cat" or "Flea")
+    }
+}
+
+// Create Robin using the Character class
+const robin = new Character("Robin");
+robin.inventory = ["sword", "potion", "artifact"]; // Add Robin's inventory
+
+// Create Robin's companion, Leo, using the Companion class
+robin.companion = new Companion("Leo", "Cat");
+
+// Create Leo's companion, Frank, using the Companion class
+robin.companion.companion = new Companion("Frank", "Flea");
+robin.companion.companion.inventory = ["small hat", "sunglasses"]; // Add Frank's inventory
+
+// Test the roll method for all characters
+console.log("Testing roll method:");
+robin.roll(); // Example: "Robin rolled a 15."
+robin.companion.roll(); // Example: "Leo rolled a 12."
+robin.companion.companion.roll(); // Example: "Frank rolled a 18."
+
+// Log Robin's inventory
+console.log("Robin's inventory:");
+for (let item of robin.inventory) {
+    console.log(item); // Prints each item in Robin's inventory
+}
+
+// Log Frank's belongings
+console.log("Frank's belongings:");
+for (let item of robin.companion.companion.inventory) {
+    console.log(item); // Prints each item in Frank's inventory
+}
+
