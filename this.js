@@ -705,4 +705,143 @@ for (let item of frank.inventory) {
     console.log(item); // Prints each item in Frank's inventory
 }
 
-//
+//Part 6: Developing Skills
+// Base Character class
+class Character {
+    // Static property: Maximum health for all characters
+    static MAX_HEALTH = 100;
+
+    constructor(name) {
+        this.name = name; // Character's name
+        this.health = Character.MAX_HEALTH; // Default health (uses static property)
+        this.inventory = []; // Default empty inventory
+    }
+
+    // Roll method for dice rolls
+    roll(mod = 0) {
+        const result = Math.floor(Math.random() * 20) + 1 + mod;
+        console.log(`${this.name} rolled a ${result}.`);
+        return result;
+    }
+}
+
+// Adventurer class extending Character
+class Adventurer extends Character {
+    // Static property: Allowed roles for adventurers
+    static ROLES = ["Fighter", "Healer", "Wizard", "Ranger"];
+
+    constructor(name, role) {
+        super(name); // Call the parent class constructor
+
+        // Check if the role is valid
+        if (!Adventurer.ROLES.includes(role)) {
+            throw new Error(`Invalid role: ${role}. Must be one of ${Adventurer.ROLES.join(", ")}.`);
+        }
+
+        this.role = role; // Adventurer's specialized role
+        this.inventory.push("bedroll", "50 gold coins"); // Default items for adventurers
+    }
+
+    // Method for scouting ahead
+    scout() {
+        console.log(`${this.name} is scouting ahead...`);
+        super.roll(); // Use the roll method from the parent class
+    }
+
+    // Method for resting to recover health
+    rest() {
+        this.health = Character.MAX_HEALTH; // Restore health to full (uses static property)
+        console.log(`${this.name} rested and recovered full health.`);
+    }
+
+    // Method for dueling another adventurer
+    duel(opponent) {
+        console.log(`A duel begins between ${this.name} and ${opponent.name}!`);
+
+        while (this.health > 50 && opponent.health > 50) {
+            const roll1 = this.roll(); // Roll for the current adventurer
+            const roll2 = opponent.roll(); // Roll for the opponent
+
+            if (roll1 > roll2) {
+                opponent.health -= 1; // Opponent loses 1 health
+                console.log(`${this.name} wins this round! ${opponent.name} now has ${opponent.health} health.`);
+            } else if (roll2 > roll1) {
+                this.health -= 1; // Current adventurer loses 1 health
+                console.log(`${opponent.name} wins this round! ${this.name} now has ${this.health} health.`);
+            } else {
+                console.log("It's a tie! No one loses health this round.");
+            }
+        }
+
+        // Determine the winner
+        if (this.health > 50) {
+            console.log(`${this.name} wins the duel with ${this.health} health remaining!`);
+        } else {
+            console.log(`${opponent.name} wins the duel with ${opponent.health} health remaining!`);
+        }
+    }
+
+    // Additional method: Cast a spell (for Wizards)
+    castSpell(spell) {
+        if (this.role === "Wizard") {
+            console.log(`${this.name} casts ${spell}!`);
+        } else {
+            console.log(`${this.name} is not a Wizard and cannot cast spells.`);
+        }
+    }
+
+    // Additional method: Attack (for Fighters)
+    attack(target) {
+        if (this.role === "Fighter") {
+            const damage = Math.floor(Math.random() * 10) + 1;
+            target.health -= damage;
+            console.log(`${this.name} attacks ${target.name} for ${damage} damage!`);
+        } else {
+            console.log(`${this.name} is not a Fighter and cannot attack.`);
+        }
+    }
+}
+
+// Companion class extending Character
+class Companion extends Character {
+    constructor(name, type, job) {
+        super(name); // Call the parent class constructor
+        this.type = type; // Companion's type (e.g., "Cat", "Flea")
+        this.job = job; // Companion's job (e.g., "Support", "Entertainer")
+    }
+
+    // Method for companions to assist
+    assist() {
+        console.log(`${this.name} the ${this.type} is assisting with ${this.job}.`);
+    }
+
+    // Additional method: Entertain (for companions with the "Entertainer" job)
+    entertain() {
+        if (this.job === "Entertainment") {
+            console.log(`${this.name} the ${this.type} is putting on a show!`);
+        } else {
+            console.log(`${this.name} is not an entertainer.`);
+        }
+    }
+}
+
+// Create two adventurers for a duel
+const robin = new Adventurer("Robin", "Ranger");
+const alice = new Adventurer("Alice", "Fighter");
+
+// Create Robin's companion, Leo
+const leo = new Companion("Leo", "Cat", "Scouting");
+robin.companion = leo;
+
+// Create Leo's companion, Frank
+const frank = new Companion("Frank", "Flea", "Entertainment");
+frank.inventory.push("small hat", "sunglasses");
+robin.companion.companion = frank;
+
+// Test the duel method
+robin.duel(alice); // Example output: A duel between Robin and Alice, with rounds and a winner
+
+// Test additional methods
+robin.castSpell("Fireball"); // Example: "Robin is not a Wizard and cannot cast spells."
+alice.attack(robin); // Example: "Alice attacks Robin for 7 damage!"
+frank.entertain(); // Example: "Frank the Flea is putting on a show!"
